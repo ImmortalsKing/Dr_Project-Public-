@@ -1,0 +1,266 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+
+{% block title %}
+    وبسایت رسمی دکتر مریم قره گوزلوئی
+{% endblock %}
+{% block content %}
+    <!--============================
+        BANNER START
+    ==============================-->
+    <section class="banner" style="background: url({{ home_banner.image.url }});direction: rtl;">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-xxl-5 col-md-9 col-xl-6 col-lg-6 wow fadeInLeft" data-wow-duration="1s">
+                    <div class="banner_text">
+                        <h1>دکتر مریم قره گوزلوئی</h1>
+                        <h2 class="header_2">جراح و متخصص زنان، زایمان و نازایی</h2>
+                        <br>
+                        <h4>دارای بورد تخصصی</h4>
+                        <br>
+                        <a onclick="scrollToAbout()" class="common_btn cursor-pointer">درباره پزشک</a>
+                    </div>
+                </div>
+                <div class="col-xxl-6 col-lg-6 col-xl-6 wow fadeInRight" data-wow-duration="1s">
+                    <div class="banner_img">
+                        <div class="img">
+                            {% if top_banner_img.image.url %}
+                            	<img src="{{ top_banner_img.image.url }}" alt="dr_img" class="img-fluid w-100">
+                            {% endif %}
+                        </div>
+                        <div class="react">
+                            <img src="{% static 'images/react.png' %}" alt="react img" class="img-fluid w-100">
+                        </div>
+                        <div class="video_call">
+                            <img src="{% static 'images/Video-call.png' %}" alt="video img" class="img-fluid w-100">
+                        </div>
+                        <div class="call">
+                            <img src="{% static 'images/Call.png' %}" alt="call img" class="img-fluid w-100">
+                        </div>
+                        <div class="review">
+                            <img src="{% static 'images/Review.png' %}" alt="review img" class="img-fluid w-100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        BANNER END
+    ==============================-->
+
+    {% if messages %}
+        <br>
+        <div style="direction: rtl" class="messages">
+            {% for message in messages %}
+                <div style="direction: rtl;" class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!--============================
+        SERVICE START
+    ==============================-->
+    <section class="service">
+        <div class="service_overlay pt_100 xs_pt_70 pb_100 xs_pb_70">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="common_heading center_heading mb_15">
+                            <h5>خدمات</h5>
+                            <h2>برخی از خدمات پزشک</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    {% for service in services %}
+                        <div class="col-xxl-4 wow fadeInUp" style="text-align: right;">
+                            <div class="single_service" style="direction: rtl;">
+                                <div class="service_img">
+                                    <span class="tf_service_icon tf_service_icon{{ service.id }}"><i
+                                            class="fas fa-heartbeat"></i></span>
+                                    <img src="{{ service.related_blog.image.url }}" alt="service img"
+                                         class="img-fluid w-100 h-50">
+                                </div>
+                                <div class="service_text">
+                                    <a href="" class="service_heading">{{ service.related_blog.title }}</a>
+                                    <p>{{ service.related_blog.short_description }}</p>
+                                    <a href="{% url 'blog_details_page' slug=service.related_blog.slug %}"
+                                       class="service_link" tabindex="0"> بیشتر بدانید <i class="far fa-long-arrow-left"
+                                                                                          aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        SERVICE END
+    ==============================-->
+
+    <!--============================
+    ABOUT START
+==============================-->
+    <section class="about pt_100 xs_pt_70 pb_100 xs_pb_70"
+             style="direction: rtl;background: url({% static 'images/service_bg.jpg' %});">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-6 col-sm-9  col-lg-5 col-md-7 wow fadeInLeft" data-wow-duration="1s">
+                    <div class="about_img">
+                        <div class="about_img_1">
+                            <img src="{{ about_dr_img.image.url }}" alt="about img" class="first_img img-fluid w-100">
+                        </div>
+                        <div class="about_img_2">
+                            <img src="{{ doctor_image }}" alt="about img" class="img-fluid w-100">
+                            <i class="fas fa-play" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-sm-12 col-lg-7  wow fadeInRight" data-wow-duration="1s">
+                    <div class="common_heading">
+                        <h5>درباره پزشک</h5>
+                        <h2>دکتر مریم قره گوزلوئی</h2>
+                        <br>
+                        <h3 style="color:#2b6ee4;">جراح و متخصص زنان، زایمان و نازایی</h3>
+                    </div>
+
+                    <ul class="about_iteam d-flex flex-wrap">
+                        <li>دارای بورد تخصصی دکتری</li>
+                        <li>جراح زایمان و نازائی</li>
+                        <li>جراح زیبایی زنان</li>
+                        <li>مشاور جنسی به زوجین</li>
+                    </ul>
+                    <a href="{% url 'about_dr_page' %}" class="common_btn">معرفی کامل پزشک</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        ABOUT END
+    ==============================-->
+
+    <!--============================
+        REVIEW START
+    ==============================-->
+    {% if reviews %}
+        <section class="review pt_100 xs_pt_70 pb_100 xs_pb_70">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="common_heading center_heading mb_45">
+                            <h5>افتخار دکتر مریم قره گوزلوئی لبخند رضایت شما است</h5>
+                            <h2>آنچه شما گفته اید</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row review_slider">
+                    {% for review in reviews %}
+                        <div class="col-xl-4 wow fadeInUp" data-wow-duration="1s" style="direction: rtl;">
+                            <div class="single_review">
+                                <p class="review_icon">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </p>
+                                <p style="font-family: 'estedad-thin';">{{ review.text }}</p>
+                                <div class="reviewer_info">
+                                    <div class="img">
+                                        <img src="{{ review.user.avatar.url }}" alt="reviewer" class="img-fluid w-100">
+                                    </div>
+                                    <h3>{{ review.user.get_full_name }}</h3>
+                                    <span style="font-family: 'estedad-thin';">{{ review.subject }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </section>
+    {% endif %}
+    <!--============================
+        REVIEW END
+    ==============================-->
+
+
+    <!--============================
+        BLOG START
+    ==============================-->
+    <section class="blog pt_100 xs_pt_70 pb_100 xs_pb_70"
+             style="direction: rtl;">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="common_heading center_heading mb_15">
+                        <h5>آخرین مقالات</h5>
+                        <h2>جدیدترین مطالب و مقالات</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                {% for blog in blogs %}
+                    <div class="col-xl-4 col-md-6 col-lg-4 wow fadeInUp" data-wow-duration="1s">
+                        <div class="single_blog">
+                            <div class="blog_img">
+                                <a {% if blog.category.color %}style="background-color: {{ blog.category.color }};"{% endif %}
+                                   href="#" class="category">{{ blog.category.title }}</a>
+                                <img src="{{ blog.image.url }}" alt="blog img" class=" img-fluid w-100">
+                            </div>
+                            <div class="blog_text">
+                                <ul class="d-flex flex-wrap blog_date">
+                                    <li><i class="fas fa-user"></i>{{ blog.author }}</li>
+                                    <li><i class="fas fa-calendar-alt"></i>{{ blog.created_at }}</li>
+                                </ul>
+                                <a href="{% url 'blog_details_page' slug=blog.slug %}"
+                                   class="blog_heading">{{ blog.title }}</a>
+                                <p>{{ blog.short_description }}</p>
+                                <div class="blog_text_icon">
+                                    <a class="blog_link" href="{% url 'blog_details_page' slug=blog.slug %}">بیشتر
+                                        بخوانید <i
+                                                class="far fa-long-arrow-left"></i></a>
+                                    <ul class="d-flex flex-wrap blog_react">
+                                        <li><i class="fas fa-comment-lines"></i>{{ blog.comments_count }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div style="margin-top: 2rem;" class="center_heading">
+                <a href="{% url 'blog_list_page' %}" class="common_btn">مشاهده تمام مقالات</a>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        BLOG END
+    ==============================-->
+
+    <!--=========================
+        SCROLL BUTTON START
+    ===========================-->
+    <div class="scroll_btn">
+        <span><i class="fas fa-arrow-alt-up"></i></span>
+    </div>
+    <!--==========================
+        SCROLL BUTTON END
+    ===========================-->
+    {% block footer_references %}
+        <script>
+            jalaliDatepicker.startWatch({
+                persianDigits: true,
+
+
+            });
+
+        </script>
+    {% endblock %}
+{% endblock %}

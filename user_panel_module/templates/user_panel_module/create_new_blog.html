@@ -1,0 +1,140 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+{% load render_partial %}
+
+{% block title %}
+    پنل کاربری
+{% endblock %}
+
+{% block content %}
+    <!--============================
+        DASHBOARD START
+    ==============================-->
+    {% if messages %}
+        <br>
+        <div style="direction: rtl" class="messages">
+            {% for message in messages %}
+                <div style="direction: rtl;" class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <section class="dashboard mt_100 xs_mt_70 pb_100 xs_pb_70" style="direction: rtl;">
+        <div class="container">
+            <div class="row">
+                {% render_partial 'user_panel_module.views.ProfileSidebarComponent' %}
+                <div class="col-xl-9 col-lg-8 wow fadeInRight" data-wow-duration="1s">
+                    <div style="position:relative;" class="dashboard_content">
+                        <h5>ایجاد یک مقاله جدید</h5>
+                        <div class="mb_50">
+                            <a class="blogs_list_edit" href="{% url 'blogs_list_panel_page' %}">انصراف</a>
+                            <form action="" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ form.media }}
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="dashboard_profile_form">
+                                            {{ form.title.label }}
+                                            {{ form.title }}
+                                            {{ form.title.errors }}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="dashboard_profile_form">
+                                            {{ form.en_title.label }}
+                                            {{ form.en_title }}
+                                            {{ form.en_title.errors }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="dashboard_profile_form">
+                                        {{ form.short_description.label }}
+                                        {{ form.short_description }}
+                                        {{ form.short_description.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="dashboard_profile_form">
+                                        {{ form.text.label }}
+                                        {{ form.text }}
+                                        {{ form.text.errors }}
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="col-lg-12">
+                                    <div class="category">
+                                        {{ form.category.label }}
+                                        {{ form.category }}
+                                        {{ form.category.errors }}
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="col-lg-12">
+                                    <div class="category">
+                                        {{ form.image.label }}
+                                        {{ form.image }}
+                                        {{ form.image.errors }}
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="dashboard_profile_form">
+                                            <div style="display: flex; align-items: center;">
+                                                {{ form.is_women_issues.label }}
+                                                {{ form.is_women_issues }}
+                                            </div>
+                                            {{ form.is_women_issues.errors }}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="dashboard_profile_form">
+                                            <div style="display: flex; align-items: center;">
+                                                {{ form.is_services.label }}
+                                                {{ form.is_services }}
+                                            </div>
+                                            {{ form.is_services.errors }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <div class="col-lg-12">
+                                    <div class="dashboard_profile_form">
+                                        {{ form.is_active.label }}
+                                        {{ form.is_active }}
+                                        {{ form.is_active.errors }}
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="col-lg-12">
+                                    <div class="dashboard_profile_form">
+                                        <label for="caption">تگ‌ها (با کاما جدا کنید)</label>
+                                        {{ tags_form.caption }}
+                                        {{ tags_form.caption.errors }}
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-auto">
+                                    <button type="submit" name="edit_profile_btn" class="common_btn">ارسال مقاله
+                                    </button>
+                                </div>
+                                    <div class="col-auto">
+                                        <a href="{% url 'create_blog_category' %}" style="background-color: #1f5423;" class="common_btn">ساخت دسته بندی جدید
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        DASHBOARD END
+    ==============================-->
+{% endblock %}

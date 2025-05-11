@@ -1,0 +1,56 @@
+{% extends 'shared/_layout.html' %}
+
+{% block title %}
+    صفحه مورد نظر یافت نشد.
+{% endblock %}
+{% block header_references %}
+    <style>
+        .custom-404-container {
+            background-color: #f8f8f8;
+            color: #333;
+            font-family: "Vazirmatn", sans-serif;
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .custom-404-title {
+            font-size: 120px;
+            margin: 0;
+            color: #d304e2;
+        }
+
+        .custom-404-subtitle {
+            font-size: 32px;
+            margin-top: 10px;
+        }
+
+        .custom-404-text {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .custom-404-button {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 24px;
+            background-color: #d304e2;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .custom-404-button:hover {
+            background-color: #a603b2;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="custom-404-container">
+        <h1 class="custom-404-title">404</h1>
+        <h2 class="custom-404-subtitle">صفحه مورد نظر پیدا نشد</h2>
+        <p class="custom-404-text">ممکن است آدرس را اشتباه وارد کرده باشید یا این صفحه دیگر وجود نداشته باشد.</p>
+        <a class="custom-404-button" href="{% url 'home_page' %}">بازگشت به صفحه اصلی</a>
+    </div>
+{% endblock %}

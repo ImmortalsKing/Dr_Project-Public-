@@ -1,0 +1,120 @@
+{% load static %}
+<!--============================
+        TOPBAR START
+    ==============================-->
+    <section class="topbar" style="direction: rtl;">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-10 col-lg-10 d-md-block">
+                    <ul class="topbar_link d-flex flex-wrap">
+                        <li><a style="margin-right:5px;" href="#"
+                        ><i class="fas fa-phone-alt"></i>{{ setting.mobile }}</a>{% if setting.phone %}<a style="margin-right:5px;" href="">-</a>
+                        	<a style="margin-right:5px;" href="#"
+                        >{{ setting.phone }}</a>
+                        {% endif %}
+                        </li>
+                        <li class="list_email"><a href="#"><i class="fas fa-envelope"></i>{{ setting.email }}</a></li>
+                        <li>
+                            <p><i class="fas fa-map-marker-alt"></i>{{ setting.address }}</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-xl-2 col-lg-2 d-md-none d-lg-block">
+                    <ul class="topbar_icon d-flex flex-wrap">
+                        <li><a href="{{ social_links.whatsapp_url }}"><i class="fab fa-whatsapp"></i></a></li>
+                        <li><a href="{{ social_links.instagram_url }}"><i class="fab fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        TOPBAR END
+    ==============================-->
+
+
+    <!--============================
+        MAIN MANU START
+    ==============================-->
+    <nav class="navbar navbar-expand-lg main_menu" style="direction: rtl;">
+        <div class="container">
+            <a style="margin-right: -2rem;" class="navbar-brand" href="{% url 'home_page' %}"><img
+                    src="{{ setting.site_logo.url }}" alt="logo" class="img-fluid w-100"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars bar_icon"></i>
+                <i class="far fa-times close_icon"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'home_page' %}">خانه</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/about-dr/' %}active{% endif %}" href="{% url 'about_dr_page' %}">معرفی پزشک</a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link {% if '/blogs/' in request.path and request.path in services_urls or '/blogs/services/' in request.path %}active{% endif %}" href="{% url 'blog_list_page_by_services' %}">خدمات<i class="far fa-sort-down"></i></a>
+                         <ul class="dropdown">
+                            {% for service in services %}
+                            	<li><a href="{% url 'blog_details_page' slug=service.related_blog.slug %}">{{ service.related_blog.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if '/blogs/' in request.path and request.path in women_issues or '/blogs/womens-issues/' in request.path %}active{% endif %}" href="{% url 'blog_list_page_by_issues' %}">بیماری ها و مسائل زنان<i class="far fa-sort-down"></i></a>
+                        <ul class="dropdown">
+                            {% for blog in women_issues_blogs %}
+                            	<li><a href="{% url 'blog_details_page' slug=blog.slug %}">{{ blog.title }}</a></li>
+                            {% endfor %}
+                            
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/gallery/' %}active{% endif %}" href="{% url 'gallery_page' %}">گالری تصاویر</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/faq/' %}active{% endif %}" href="{% url 'faq_page' %}">پرسش و پاسخ</a>
+                    </li>
+                    {% if request.user.is_authenticated %}
+                    	<li class="nav-item">
+                        <a style="color: #2ac08c;" class="nav-link" href="{% url 'my_profile_page' %}">پنل کاربری</a>
+                    </li>
+                        {% else %}
+                        <li class="nav-item">
+                        <a style="color: #2ac08c;"  class="nav-link" href="{% url 'login_page' %}">ورود | ثبت نام</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul style="margin-left: -2rem;" class="menu_btn d-flex flex-wrap align-items-center">
+                    <li><a href="{{ setting.appointment_url }}" class="common_btn" target="_blank"> نوبت دکتر</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!--============================
+        MAIN MANU END
+    ==============================-->
+
+    <!--============================
+        BREADCRUMB START
+    ==============================-->
+    {% if request.path != '/' %}
+        <section class="breadcrumb" style="background-image: url('{{ common_banner.image.url }}');">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb_text">
+                        <h1>{{ desired_path }}</h1>
+                        <ul>
+                            <li><a href="">{{ desired_path }}</a></li>
+                            <li><a href="{% url 'home_page' %}" class="no-after">خانه</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+    <!--============================
+        BREADCRUMB END
+    ==============================-->

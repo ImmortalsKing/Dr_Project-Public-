@@ -1,0 +1,174 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+
+{% block title %}
+    About Dr. Maryam Gharahgozloei
+{% endblock %}
+
+{% block content %}
+    <!--============================
+        TEAM DETAILS START
+    ==============================-->
+    {% if messages %}
+        <br>
+        <div style="direction: rtl" class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <section class="team_details pt_100 xs_pt_70 pb_100 xs_pb_70" style="direction: rtl;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 wow fadeInLeft" data-wow-duration="1s">
+                    <div class="row">
+                        <div class="col-xl-5 col-md-5 col-lg-5">
+                            <div class="team_details_img">
+                                <img src="{{ doctor.image.url }}" alt="team" class="img-fluid w-100">
+                            </div>
+                        </div>
+                        <div class="col-xl-7 col-md-7 col-lg-7">
+                            <div class="team_details_img_text">
+                                <h3>{{ doctor.name }}</h3>
+                                <p>{{ doctor.short_bio|safe }}</p>
+                                <span><a href=""> تماس: {{ setting.mobile }}</a>&nbsp;{% if setting.phone %}- {{ setting.phone }}{% endif %}</span>
+                                <a href="">ایمیل: {{ setting.email }}</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="biography">
+                        <h3>بیوگرافی {{ doctor.name }}</h3>
+                        <div class="biography_text">
+                            <h4 class="mb-3">بیوگرافی</h4>
+                            <p class="mb-4">{{ doctor.biography|safe }}</p>
+                            <br>
+                            <h4 class="mb-3">خدمات پزشک</h4>
+
+                            <ul class="services_style">
+                                {% for service in doctor.services.all %}
+                                    <li>{{ service.related_blog.title }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="comment_area">
+                        <h2>مجموع دیدگاه({{ comments_count }})</h2>
+                    {% for comment in comments %}
+                        <div id="comment_{{ comment.id }}" class="single_comment">
+                            <div class="comment_img">
+                                <img src="{{ comment.user.avatar.url }}" alt="review" class="img-fluid w-100">
+                            </div>
+                                <div class="comment_text">
+                                    <h4>
+                                        {% if comment.user.first_name and comment.user.last_name %}
+                                            {{ comment.user.get_full_name }}
+                                        {% else %}
+                                            {{ comment.user.email }}
+                                        {% endif %}
+                                        <span><i class="fal fa-clock"></i>{{ comment.create_date }}</span></h4>
+                                    <h6>({{ comment.subject }})</h6>
+                                    <br>
+                                    <p>{{ comment.text }}</p>
+                                    {% if request.user.is_superuser %}
+                                    	<div class="comments_btns">
+                                    	<a onclick="fillParentId({{ comment.id }})"><i class="fal fa-reply-all"></i>پاسخ</a>
+                                        <form action="" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="delete_comment_id" value="{{ comment.id }}">
+                                    	<button name="delete" style="background: gray;"><i class="fal fa-reply-all"></i>حذف کردن</button>
+                                        </form>
+                                        </div>
+                                    {% endif %}
+                                </div></div>
+                            {% for sub_comment in comment.commentsaboutdr_set.all %}
+                                <div id="comment_{{ sub_comment.id }}" class="single_comment commant_reply">
+                            <div class="comment_img">
+                                <img src="{{ sub_comment.user.avatar.url }}" alt="review" class="img-fluid w-100">
+                            </div>
+                            <div class="comment_text">
+                                <h4>{{ sub_comment.user.get_full_name }}<span><i class="fal fa-clock" aria-hidden="true"></i>{{ sub_comment.create_date }}</span>
+                                </h4>
+                                <br>
+                                <p>{{ sub_comment.text }}</p>
+                                {% if request.user.is_superuser %}
+                                    <div class="comments_btns">
+                                        <form action="" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="cdelete_comment_id" value="{{ sub_comment.id }}">
+                                    	<button name="child_delete" style="background: gray;"><i class="fal fa-reply-all"></i>حذف کردن</button>
+                                        </form>
+                                    </div>
+                                    {% endif %}
+                            </div>
+                        </div>
+                            {% endfor %}
+
+                            {% endfor %}
+                    </div>
+                    <br>
+                    {% if request.user.is_authenticated %}
+                    	<form action="" method="post" class="comment_input_area" id="comment_area">
+                        {% csrf_token %}
+                        <h2>ارسال دیدگاه</h2>
+                        <div class="row">
+                            <input type="hidden" id="parent_id" name="parent_id" value="">
+                            <div class="col-xl-6">
+                                <label>موضوع: </label>
+                                {{ form.subject }}
+                                {{ form.subject.errors }}
+                            </div>
+                            <div class="col-xl-12 mt-4 mb-4">
+                                <label>متن: </label>
+                                {{ form.text }}
+                                {{ form.text.errors }}
+                            </div>
+                            <div class="col-xl-12 mt-4 mb-4">
+                                {{ form.captcha }}
+                                {{ form.captcha.errors }}
+                            </div>
+                            <div class="col-xl-12">
+                                <button name="send_comment" type="submit" class="common_btn">ارسال کنید</button>
+                            </div>
+                        </div>
+                    </form>
+                        {% else %}
+                        <strong>جهت ارسال نظر می باست ابتدا &nbsp;<a href="{% url 'login_page' %}">وارد</a> &nbsp; شوید</strong>
+                    {% endif %}
+
+                </div>
+                <div class="col-lg-4 wow fadeInRight" data-wow-duration="1s">
+                    <div class="team_details_sidebar" id="sticky_sidebar">
+                        <div class="team_details_timeing">
+                            <h5>روزهای کاری</h5>
+                            {% for time in working_hours %}
+                                <p class="d-flex justify-content-between">{{ time.day }}<span>{{ time.start_time }}  - {{ time.end_time }} {{ time.time_of_day }}</span>
+                                </p>
+                            {% endfor %}
+                        </div>
+                        <div class="team_details_timeing">
+                            <h5>آدرس و تلفن</h5>
+                                <span style="font-weight: bold;">آدرس:</span><span> {{ setting.address }}</span>
+                                <br>
+                                <br>
+                                <span style="font-weight: bold;direction: rtl;">تلفن ها:</span><span> {{ setting.mobile }} {% if setting.phone %}- {{ setting.phone }}{% endif %}</span>
+                        </div>
+                        <div class="team_details_timeing">
+                            <h5>بیمارستان های طرف قرارداد</h5>
+                                {% for contracted_hospital in contracted_hospitals %}
+                                        <span>{{ contracted_hospital.full_name }} {% if not forloop.last %} - {% endif %}</span>
+                                {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        TEAM DETAILS END
+    ==============================-->
+{% endblock %}

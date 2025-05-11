@@ -1,0 +1,124 @@
+{% load static %}
+    <!--============================
+        FOOTER START
+    ==============================-->
+    <footer style="background: url({% static 'images/footer_bg.jpg' %});direction: rtl;">
+        <div class="container">
+{#            {% include 'shared/includes/subscribe.html' with form=form %}#}
+
+            <div style="padding-top: 50px;" class="row mt_10">
+                <div class="col-lg-4 col-sm-9 col-md-6">
+                    <div class="footer_left">
+                        <a href="{% url 'home_page' %}" class="tf_footer_logo">
+                            <img src="{{ setting.site_logo.url }}" alt="DrMaryam" class="img-fluid w-100">
+                        </a>
+                        <p class="soolati">درباره ی پزشک:</p>
+                        <p class="justify-text">{{ about_dr.short_bio|safe }}</p>
+{#                        <div class="footer_mail">#}
+{#                            <span>سلام به :</span>#}
+{#                            <a href="#">support@gmail.com</a>#}
+{#                        </div>#}
+{#                        <div class="tf_footer_icon d-flex flex-wrap align-items-center">#}
+{#                            <span>اشتراک گذاری :</span>#}
+{#                            <ul class="d-flex flex-wrap">#}
+{#                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>#}
+{#                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>#}
+{#                                <li><a href="#"><i class="fab fa-pinterest-p"></i></a></li>#}
+{#                                <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>#}
+{#                            </ul>#}
+{#                        </div>#}
+                    </div>
+                </div>
+{#                <div class="col-lg-2 col-sm-6 col-md-4">#}
+{#                    <div class="quick_link">#}
+{#                        <h5>شرکت</h5>#}
+{#                        <ul>#}
+{#                            <li><a href="index.html">خانه</a></li>#}
+{#                            <li><a href="about.html">درباره ما</a></li>#}
+{#                            <li><a href="service.html">خدمات ما</a></li>#}
+{#                            <li><a href="team.html">تیم ما</a></li>#}
+{#                            <li><a href="contact.html">تماس با ما</a></li>#}
+{#                        </ul>#}
+{#                    </div>#}
+{#                </div>#}
+                <div style="margin-right: 2rem;margin-left: 2rem;" class="col-lg-3 col-sm-6 col-md-3">
+                    <div class="quick_link">
+                        <h5>آخرین مطالب</h5>
+                        <ul>
+                            {% for last_blog in last_blogs %}
+                            	<li><a href="{% url 'blog_details_page' slug=last_blog.slug %}">{{ last_blog.title }}</a>
+                            <p class="ellipsis" style="color:#f32efd;">{{ last_blog.short_description }}</p>
+                            </li>
+                            {% endfor %}
+                            
+                        </ul>
+                    </div>
+                </div>
+{#                <div class="col-lg-2 col-sm-6 col-md-3">#}
+{#                    <div class="quick_link">#}
+{#                        <h5>دسترسی سریع</h5>#}
+{#                        <ul>#}
+{#                            <li><a href="#">چرا ما ؟</a></li>#}
+{#                            <li><a href="priceing.html">قیمت گذاری</a></li>#}
+{#                            <li><a href="blog.html">اخبار و مقالات</a></li>#}
+{#                            <li><a href="sing_up.html">ورود</a></li>#}
+{#                            <li><a href="#">عضویت</a></li>#}
+{#                        </ul>#}
+{#                    </div>#}
+{#                </div>#}
+                <div class="col-lg-4
+                 col-sm-6 col-md-6 order-md-2">
+                    <div class="address">
+                        <h5>تماس با پزشک</h5>
+                        <div class="tf_footer_address">
+                            <p>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span class="soolati">آدرس:</span>
+                                {{ setting.address }}
+                            </p>
+                            <p>
+                                <i class="fas fa-clock"></i>
+                                <span class="soolati">ساعت کاری:</span>
+                                {% for time in working_hours %}
+                                {{ time.day }} - {{ time.start_time }} تا {{ time.end_time }} {{ time.time_of_day }} {% if not forloop.last %} - {% endif %}
+                            {% endfor %}
+                                
+                            </p>
+                            <p>
+                                <i class="fas fa-hospital"></i>
+                                <span class="soolati">بیمارستان های طرف قرارداد:</span> 
+                                {% for hospital in hospitals %}
+                                {{ hospital.full_name }} {% if not forloop.last %} ، {% endif %}
+                                {% endfor %}
+                            </p>
+                            <a href="">
+                                <i class="fas fa-envelope"></i>
+                                <span class="soolati">ایمیل:</span>
+                                {{ setting.email }}
+                            </a>
+                            <a href="">
+                                <i class="fas fa-phone-alt"></i>
+                                <span class="soolati">تلفن ها:</span>
+                                {{ setting.mobile }} {% if setting.phone %}- {{ setting.phone }}{% endif %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt_70 xs_mt_45 sm_margin ">
+                <div class="col-xl-12">
+                    <div class="copyright d-flex flex-wrap justify-content-between">
+                        <p>{{ setting.copy_right }}</p>
+                        <ul class="d-flex flex-wrap">
+                            <li><a href="">Powered By: Immortals Team</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+    <!--============================
+        FOOTER END
+    ==============================-->

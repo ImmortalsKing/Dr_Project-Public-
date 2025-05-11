@@ -1,0 +1,38 @@
+{% load static %}
+<div class="col-xl-3 col-lg-4 wow fadeInLeft" data-wow-duration="1s">
+    <div class="user_profile">
+        <div class="user_profile_img">
+        <img src="{{ request.user.avatar.url }}" alt="user" class="img-fluid w-100">
+        {% if request.user.is_superuser %}
+        	<form id="avatarForm" action="{% url 'upload_avatar' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+                <label for="profile_photo"><i class="fas fa-camera"></i></label>
+                <input id="profile_photo" type="file" name="avatar" accept="image/*" hidden>
+        </form>
+        {% endif %}
+        </div>
+        <h4>
+            {% if request.user.first_name and request.user.last_name %}
+                {{ request.user.get_full_name }}
+            {% endif %}
+        </h4>
+    </div>
+    <ul class="dashboard_menu">
+        <li><a class="{% if request.path == '/my-profile/' %}active{% endif %}" href="{% url 'my_profile_page' %}">پروفایل من</a></li>
+        {% if request.user.is_superuser %}
+        	<li><a class="{% if '/my-profile/comments-list/' in request.path %}active{% endif %}" href="{% url 'about_dr_comments_list' %}">لیست نظرات</a></li>
+        <li><a class="{% if '/my-profile/blogs-list/' in request.path or '/my-profile/create-blog/' in request.path or '/my-profile/edit-blog/' in request.path or '/my-profile/blog-category/' in request.path %}active{% endif %}" href="{% url 'blogs_list_panel_page' %}">لیست مقاله ها</a></li>
+        <li><a class="{% if '/my-profile/about-doctor-edit/' in request.path or '/my-profile/working_hours/' in request.path %}active{% endif %}" href="{% url 'about_doctor_edit' pk=main_doctor.pk %}">مدیریت بخش "معرفی پزشک"</a></li>
+        <li><a href="{{ main_doctor.dr_panel_url }}" target="_blank">پنل نوبت دهی</a></li>
+        {% endif %}
+        <li><a href="{% url 'logout' %}">خروج</a></li>
+    </ul>
+</div>
+
+{% if request.user.is_superuser %}
+	<script>
+    document.getElementById('profile_photo').addEventListener('change', function () {
+        document.getElementById('avatarForm').submit();
+    });
+</script>
+{% endif %}

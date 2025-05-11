@@ -1,0 +1,22 @@
+{% load static %}
+{% load render_partial %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=device-dpi">
+    <title>{% block title %}{% endblock %}</title>
+        <meta name="description" content="دکتر مریم قره‌گوزلوئی، متخصص زنان و زایمان با بورد تخصصی، ارائه‌دهنده خدمات تعیین جنسیت، مشاوره‌های قبل و بعد از بارداری، مشاوره‌های جنسی و جراحی‌های زنان.">
+        <link rel="icon" type="image/png" href="{% static 'images/icon.png' %}">
+    {% include 'shared/header_references.html' %}
+    {% block header_references %}{% endblock %}
+</head>
+<body>
+    {% render_partial 'home_module.views.site_header_component' %}
+    {% block content %}{% endblock %}
+    {% render_partial 'home_module.views.site_footer_component' %}
+    {% include 'shared/footer_references.html' %}
+    {% block footer_references %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,96 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}
+    گالری تصاویر ما
+{% endblock %}
+
+{% block content %}
+    <!--============================
+        GALLARY start
+    ==============================-->
+    {% if messages %}
+        {% for message in messages %}
+            <div style="direction: rtl;" class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    {% if request.user.is_superuser %}
+        <div class="toggle-btn" onclick="toggleFaqForm()">اضافه کردن تصویر +</div>
+        <div style="direction: rtl;" class="faq-form" id="faq-form">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="title">عنوان:</label>
+                <input type="text" name="title" id="title" class="form-control" required>
+                <label for="image">تصویر:</label>
+                <input type="file" name="image" id="image" class="form-control" required>
+                <button type="submit" name="add_img" class="btn btn-primary">اضافه کن!</button>
+            </form>
+        </div>
+    {% endif %}
+    <section class="gallary pt_75 xs_pt_45 pb_100 xs_pb_70">
+        <div class="container">
+            <div class="row">
+                {% for gallery in galleries %}
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-duration="1s">
+                        <a class="venobox gallary_img1" data-gall="gallery01" href="{{ gallery.image.url }}">
+                            {% thumbnail gallery.image '300x300' crop='center' as im %}
+                                <img src="{{ im.url }}" alt="gallery1" class="img-fluid w-100">
+                            {% endthumbnail %}
+                            <div class="gal_img_overlay">
+                                <svg style="color:white;" xmlns="http://www.w3.org/2000/svg" width="35" height="35"
+                                     fill="currentColor"
+                                     class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                                </svg>
+                            </div>
+                        </a>
+                        {% if request.user.is_superuser %}
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="img_id" value="{{ gallery.id }}">
+                                <button type="submit" name="delete_gallery" class="btn btn-outline-danger w-100">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                         class="bi bi-trash" viewBox="0 0 16 16">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+            </div>
+            <div class="row mt_60">
+                <div class="col-12">
+                    <div id="pagination">
+                        <nav aria-label="...">
+                            <ul class="pagination justify-content-center">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item"><a class="page-link"
+                                                             href="?page={{ page_obj.previous_page_number }}"><i
+                                            class="far fa-angle-double-left"></i></a></li>
+                                {% endif %}
+                                {% for pageNumber in paginator.page_range %}
+                                    <li class="page-item"><a
+                                            class="page-link {% if page_obj.number == pageNumber %}active{% endif %}"
+                                            href="?page={{ pageNumber }}">{{ pageNumber }}</a></li>
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                    <li class="page-item"><a class="page-link"
+                                                             href="?page={{ page_obj.next_page_number }}"><i
+                                            class="far fa-angle-double-right"></i></a></li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        GALLARY END
+    ==============================-->
+{% endblock %}

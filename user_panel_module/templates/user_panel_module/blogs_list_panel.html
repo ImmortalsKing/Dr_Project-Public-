@@ -1,0 +1,136 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+{% load render_partial %}
+
+{% block title %}
+    پنل کاربری
+{% endblock %}
+
+{% block content %}
+    <!--============================
+        DASHBOARD START
+    ==============================-->
+    {% if messages %}
+        <br>
+        <div style="direction: rtl" class="messages">
+            {% for message in messages %}
+                <div style="direction: rtl;" class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <section class="dashboard mt_100 xs_mt_70 pb_100 xs_pb_70" style="direction: rtl;">
+        <div class="container">
+            <div class="row">
+                {% render_partial 'user_panel_module.views.ProfileSidebarComponent' %}
+                <div class="col-xl-9 col-lg-8 wow fadeInRight" data-wow-duration="1s">
+                    <div style="position:relative;" class="dashboard_content">
+                        <h5>لیست مقاله ها</h5>
+                        <a class="blogs_list_edit" href="{% url 'create_new_blog_page' %}">مقاله جدید بنویس</a>
+                        <div class="appointment_history">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <th class="name">
+                                                موضوع/دسته بندی
+                                            </th>
+
+                                            <th class="date">
+                                                تاریخ
+                                            </th>
+
+                                            <th class="new">
+                                                نویسنده
+                                            </th>
+
+                                            <th class="new">
+                                                محوریت
+                                            </th>
+
+                                            <th class="status">
+                                                وضعیت
+                                            </th>
+
+                                            <th class="edit">
+                                                عملیات
+                                            </th>
+                                        </tr>
+                                        {% for blog in blogs %}
+                                        	<tr class="tabile_row">
+                                            <td class="name">
+                                                <a href="{% url 'blog_details_page' slug=blog.slug %}"><p>{{ blog.title }}</p></a>
+                                                <span>{{ blog.category.title }}</span>
+                                            </td>
+
+                                            <td class="date">
+                                                <p>{{ blog.created_at }}</p>
+                                            </td>
+
+                                            <td class="new">
+                                                <p>{{ blog.author }}</p>
+                                            </td>
+
+                                            <td class="new">
+                                                {% if blog.is_services %}
+                                                <p>خدمات</p>
+                                                {% elif blog.is_women_issues %}
+                                                <p>بیماری ها و مسائل زنان</p>
+                                                {% else %}
+                                                <p>-</p>
+                                                {% endif %}
+                                            </td>
+
+                                            <td class="status">
+                                                {% if blog.is_active %}
+                                                	<button style="background-color: #1d78e2">فعال</button>
+                                                    {% else %}
+                                                    <button style="background-color: darkred;">غیرفعال</button>
+                                                {% endif %}
+                                            </td>
+
+                                            <td class="edit">
+                                                <a href="{% url 'edit_blog_page' slug=blog.slug %}">ویرایش</a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row mt_60">
+                            <div class="col-12">
+                                <div id="pagination">
+                                    <nav aria-label="...">
+                                        <ul class="pagination justify-content-center">
+                                            {% if page_obj.has_previous %}
+                                                <li class="page-item"><a class="page-link"
+                                                                         href="?page={{ page_obj.previous_page_number }}"><i
+                                                        class="far fa-angle-double-left"></i></a></li>
+                                            {% endif %}
+                                            {% for pageNumber in paginator.page_range %}
+                                                <li class="page-item"><a
+                                                        class="page-link {% if page_obj.number == pageNumber %}active{% endif %}"
+                                                        href="?page={{ pageNumber }}">{{ pageNumber }}</a></li>
+                                            {% endfor %}
+                                            {% if page_obj.has_next %}
+                                                <li class="page-item"><a class="page-link"
+                                                                         href="?page={{ page_obj.next_page_number }}"><i
+                                                        class="far fa-angle-double-right"></i></a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        DASHBOARD END
+    ==============================-->
+{% endblock %}

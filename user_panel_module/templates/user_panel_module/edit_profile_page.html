@@ -1,0 +1,127 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+{% load render_partial %}
+
+{% block title %}
+	ویرایش پروفایل
+{% endblock %}
+
+{% block content %}
+	<!--============================
+        DASHBOARD START
+    ==============================-->
+    {% if messages %}
+        <br>
+        <div style="direction: rtl" class="messages">
+            {% for message in messages %}
+                <div style="direction: rtl;" class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <section class="dashboard mt_100 xs_mt_70 pb_100 xs_pb_70" style="direction: rtl;">
+        <div class="container">
+            <div class="row">
+                {% render_partial 'user_panel_module.views.ProfileSidebarComponent' %}
+                <div class="col-xl-9 col-lg-8 wow fadeInRight" data-wow-duration="1s">
+                    <div class="dashboard_content dashboard_profile">
+                        <h5>ویرایش اطلاعات پروفایل</h5>
+                        <div class="mb_50">
+                            <a href="{% url 'my_profile_page' %}">انصراف</a>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="dashboard_profile_form">
+                                        {{ edit_form.first_name.label }}
+                                        {{ edit_form.first_name }}
+                                        {{ edit_form.first_name.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="dashboard_profile_form">
+                                        {{ edit_form.last_name.label }}
+                                        {{ edit_form.last_name }}
+                                        {{ edit_form.last_name.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="dashboard_profile_form">
+                                        {{ edit_form.mobile.label }}
+                                        {{ edit_form.mobile }}
+                                        {{ edit_form.mobile.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <div class="dashboard_profile_form">
+                                        {{ edit_form.email.label }}
+                                        {{ edit_form.email }}
+                                        {{ edit_form.email.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="dashboard_profile_form">
+                                        {{ edit_form.address.label }}
+                                        {{ edit_form.address }}
+                                        {{ edit_form.address.errors }}
+                                    </div>
+                                </div>
+                                    <div class="col-lg-12">
+                                    <div class="dashboard_profile_form">
+                                        {{ edit_form.captcha }}
+                                        {{ edit_form.captcha.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <button type="submit" name="edit_profile_btn" class="common_btn">ذخیره تغییرات</button>
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                        <h5>تغییر رمز عبور</h5>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                                <div class="col-md-6">
+                                    <div class="dashboard_profile_form">
+                                        {{ pass_form.current_password.label }}
+                                        {{ pass_form.current_password }}
+                                        {{ pass_form.current_password.errors }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                <div class="col-md-6">
+                                    <div class="dashboard_profile_form">
+                                        {{ pass_form.new_password.label }}
+                                        {{ pass_form.new_password }}
+                                        {{ pass_form.new_password.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="dashboard_profile_form">
+                                        {{ pass_form.new_password_confirm.label }}
+                                        {{ pass_form.new_password_confirm }}
+                                        {{ pass_form.new_password_confirm.errors }}
+                                    </div>
+                                </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                    <div class="dashboard_profile_form">
+                                        {{ pass_form.captcha }}
+                                        {{ pass_form.captcha.errors }}
+                                    </div>
+                                </div>
+                                <div class="col-xl-12">
+                                    <button type="submit" name="change_pass_btn" class="common_btn">تغییر کلمه عبور</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        DASHBOARD END
+    ==============================-->
+{% endblock %}

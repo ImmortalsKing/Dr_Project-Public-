@@ -1,0 +1,60 @@
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx_server
+    restart: unless-stopped
+    depends_on:
+      - web
+    ports:
+      - "${NGINX_PORT}:15520"
+    volumes:
+      - "./.ci/nginx/conf.d:/etc/nginx/conf.d"
+      - "static_volume:/app/staticfiles"
+      - "media_volume:/app/media"
+    networks:
+      - dr_network
+
+  db:
+    image: postgres:latest
+    container_name: dr_project_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - dr_network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+  web:
+    build: .
+    container_name: dr_django_app
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app/
+      - "static_volume:/app/staticfiles"
+      - "media_volume:/app/media"
+    networks:
+      - dr_network
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+
+networks:
+  dr_network:
+    driver: bridge

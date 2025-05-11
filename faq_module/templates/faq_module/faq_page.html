@@ -1,0 +1,140 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+
+{% block title %}
+    پرسش و پاسخ
+{% endblock %}
+
+{% block content %}
+    <!--============================
+        FAQ START
+    ==============================-->
+    {% if messages %}
+        {% for message in messages %}
+            <div style="direction: rtl;" class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    {% if request.user.is_superuser %}
+        <div class="toggle-btn" onclick="toggleFaqForm()">اضافه کردن پرسش / پاسخ +</div>
+        <div style="direction: rtl;" class="faq-form" id="faq-form">
+            <form action="" method="post">
+                {% csrf_token %}
+                <label for="question">پرسش:</label>
+                <textarea type="text" name="question" id="question" class="form-control" required></textarea>
+                <label for="answer">پاسخ:</label>
+                <textarea type="text" name="answer" id="answer" class="form-control" required></textarea>
+                <button type="submit" name="add_faq" class="btn btn-primary">اضافه کن!</button>
+            </form>
+        </div>
+    {% endif %}
+    <section class="faq_page pt_75 xs_pt_45 pb_100 xs_pb_70">
+        <div class="container">
+            <div class="faq_accordion accordion accordion-flush" id="accordionFlushExample">
+    <div class="row">
+        <div class="col-lg-12 wow fadeInLeft" data-wow-duration="1s">
+            {% for faq in faqs %}
+                <div class="accordion-item position-relative">
+                    <div class="d-flex justify-content-between align-items-center">
+                        {% if request.user.is_superuser %}
+                        	<div style="margin-left: 10px;" class="me-3">
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="faq_id" value="{{ faq.id }}">
+                                    <button type="submit" name="delete_faq" class="btn btn-sm btn-danger" title="حذف">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                                </form>
+                        </div>
+                            {% else %}
+                            <div style="margin-left: 10px;" class="me-3">
+                        </div>
+                        {% endif %}
+                        <h2 class="accordion-header" id="flush-heading{{ faq.id }}">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#flush-collapse{{ faq.id }}" aria-expanded="true"
+                                    aria-controls="flush-collapse{{ faq.id }}">
+                                {{ faq.question }}
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="flush-collapse{{ faq.id }}" class="accordion-collapse collapse"
+                         aria-labelledby="flush-heading{{ faq.id }}"
+                         data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">{{ faq.answer }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+            <div class="faq_page_text mt_100 xs_mt_70 wow fadeInUp" data-wow-duration="1s" style="direction: rtl;">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="faq_page_qus">
+                            <h3>آیا سوالی دارید ؟</h3>
+                            <p>سوال، نظر، انتقاد و پیشنهادات خود را از طریق فرم زیر با ما در میان بگذارید. در تلاش هستیم
+                                که در اسرع وقت پاسخگوی شما عزیزان باشیم.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="faq_page_form">
+                            <div class="row">
+                                <form action="{% url 'faq_page' %}" method="post">
+                                    {% csrf_token %}
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ contact_form.full_name }}
+                                            {{ contact_form.full_name.errors }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ contact_form.email }}
+                                            {{ contact_form.email.errors }}
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{ contact_form.mobile }}
+                                            {{ contact_form.mobile.errors }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ contact_form.subject }}
+                                            {{ contact_form.subject.errors }}
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            {{ contact_form.message }}
+                                            {{ contact_form.message.errors }}
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            {{ contact_form.captcha }}
+                                            {{ contact_form.captcha.errors }}
+                                        </div>
+                                    </div>
+                                    <br>
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button type="submit" name="contact_btn" class="common_btn">ارسال پیام</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        FAQ END
+    ==============================-->
+{% endblock %}

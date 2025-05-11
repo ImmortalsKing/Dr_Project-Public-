@@ -1,0 +1,123 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+{% load render_partial %}
+
+{% block title %}
+    پنل کاربری
+{% endblock %}
+
+{% block content %}
+    <!--============================
+        DASHBOARD START
+    ==============================-->
+    {% if messages %}
+        <br>
+        <div style="direction: rtl" class="messages">
+            {% for message in messages %}
+                <div style="direction: rtl;" class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <section class="dashboard mt_100 xs_mt_70 pb_100 xs_pb_70" style="direction: rtl;">
+        <div class="container">
+            <div class="row">
+                {% render_partial 'user_panel_module.views.ProfileSidebarComponent' %}
+                <div class="col-xl-9 col-lg-8 wow fadeInRight" data-wow-duration="1s">
+                    <div style="position:relative;" class="dashboard_content">
+                        <h5>ویرایش بخش "معرفی پزشک"</h5>
+                        <div class="mb_50">
+                            <a class="blogs_list_edit" href="{% url 'my_profile_page' %}">انصراف</a>
+                            <form action="" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ form.media }}
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="dashboard_profile_form">
+                                            {{ form.name.label }}
+                                            {{ form.name }}
+                                            {{ form.name.errors }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="dashboard_profile_form">
+                                        {{ form.short_bio.label }}
+                                        {{ form.short_bio }}
+                                        {{ form.short_bio.errors }}
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="col-lg-12">
+                                    <div class="dashboard_profile_form">
+                                        {{ form.biography.label }}
+                                        {{ form.biography }}
+                                        {{ form.biography.errors }}
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="col-lg-12">
+                                    <div class="category">
+                                        {% if doctor.image %}
+                                            <div>
+                                                <label>مشاهده تصویر در حال حاضر:</label>
+                                                <img src="{{ doctor.image.url }}" alt="تصویر مقاله"
+                                                     style="max-width: 300px; max-height: 200px;">
+                                            </div>
+                                            <br>
+                                        {% endif %}
+                                        جهت دانلود تصویر {{ form.image }}
+                                        {{ form.image.errors }}
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <div class="col-lg-12">
+                                    <div class="dashboard_profile_form">
+                                        <label for="caption">بیمارستان های طرف قرارداد (با کاما جدا کنید.)</label>
+                                        {{ hospitals_form.full_name }}
+                                        {{ hospitals_form.full_name.errors }}
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="col-lg-12">
+                                    <div class="dashboard_profile_form">
+                                        <label>ساعت های کاری پزشک</label>
+                                        <ul>
+                                            {% for time in working_hours_list %}
+                                                <li>{{ time.day }}: <span>{{ time.start_time }}  - {{ time.end_time }} {{ time.time_of_day }}</span>
+                                                </li>
+                                                {% empty %}
+                                                <li>هیچ ساعت کاری برای این پزشک وجود ندارد.</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <button type="submit" name="update_doctor_info" class="common_btn">
+                                            ذخیره تغییرات
+                                        </button>
+                                    </div>
+                                    <div class="col-auto">
+                                        <a href="{% url 'create_working_hours' %}" style="background-color: gray;" class="common_btn">
+                                            مدیریت ساعات کاری
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </form>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        DASHBOARD END
+    ==============================-->
+{% endblock %}

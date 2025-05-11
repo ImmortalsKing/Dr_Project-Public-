@@ -1,0 +1,133 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+{% load render_partial %}
+
+{% block title %}
+    پنل کاربری
+{% endblock %}
+
+{% block content %}
+    <!--============================
+        DASHBOARD START
+    ==============================-->
+    {% if messages %}
+        <br>
+        <div style="direction: rtl" class="messages">
+            {% for message in messages %}
+                <div style="direction: rtl;" class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <section class="dashboard mt_100 xs_mt_70 pb_100 xs_pb_70" style="direction: rtl;">
+        <div class="container">
+            <div class="row">
+                {% render_partial 'user_panel_module.views.ProfileSidebarComponent' %}
+                <div class="col-xl-9 col-lg-8 wow fadeInRight" data-wow-duration="1s">
+                    <div style="position:relative;" class="dashboard_content">
+                        <h5>ساخت دسته بندی مقاله ها</h5>
+                        <div class="mb_50">
+                            <a class="blogs_list_edit" href="{% url 'blogs_list_panel_page' %}">بازگشت</a>
+                            <form action="" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="dashboard_profile_form">
+                                            {{ blog_category_form.title.label }}
+                                            {{ blog_category_form.title }}
+                                            {{ blog_category_form.title.errors }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="dashboard_profile_form">
+                                            {{ blog_category_form.url_title.label }}
+                                            {{ blog_category_form.url_title }}
+                                            {{ blog_category_form.url_title.errors }}
+                                        </div>
+                                    </div>
+                                </div>
+                                    <div class="col-md-12">
+                                        <div class="dashboard_profile_form">
+                                            {{ blog_category_form.short_description.label }}
+                                            {{ blog_category_form.short_description }}
+                                            {{ blog_category_form.short_description.errors }}
+                                        </div>
+                                    </div>
+                                <br>
+                                <br>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                        <div class="dashboard_profile_form">
+                                            {{ blog_category_form.color.label }}
+                                            {{ blog_category_form.color }}
+                                            {{ blog_category_form.color.errors }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="color-container">
+                                            {% for valid_color in valid_colors %}
+                                                <div class="color-box-wrapper">
+                                                    <span class="color-box"
+                                                          style="background-color: {{ valid_color }};"></span>
+                                                    <span class="color-name">{{ valid_color }}</span>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="dashboard_profile_form">
+                                            {{ blog_category_form.image.label }}
+                                            {{ blog_category_form.image }}
+                                            {{ blog_category_form.image.errors }}
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <div class="col-xl-12">
+                                        <button type="submit" name="add_blog_category" class="common_btn">
+                                            افزودن
+                                        </button>
+                                    </div>
+                            </form>
+                            <br>
+                            <br>
+                            <div class="col-lg-12">
+                                <div class="dashboard_profile_form">
+                                    <label>دسته بندی های مقاله ها</label>
+                                    <ul>
+                                        {% for category in blog_category_list %}
+                                            <li>
+                                                <div class="inline-container">
+                                                    {{ category.title }}:{{ category.color }}
+                                                    <form action="" method="post">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="category_id"
+                                                               value="{{ category.id }}">
+                                                        <div class="delete_wh">
+                                                            <button type="submit" name="delete_blog_category">حذف
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </li>
+                                            {% empty %}
+                                            <li>هیچ دسته بندی برای مقاله ها وجود ندارد.</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        DASHBOARD END
+    ==============================-->
+{% endblock %}

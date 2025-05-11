@@ -1,0 +1,79 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+
+{% block title %}
+    ثبت نام
+{% endblock %}
+
+{% block footer_references %}
+	<script src="https://www.google.com/recaptcha/api.js?hl=fa" async defer></script>
+{% endblock %}
+
+{% block content %}
+    <!--============================
+        SIGN UP START
+    ==============================-->
+    <section class="sign_up pt_100 xs_pt_70 pb_100 xs_pb_70">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-5 col-md-9 col-lg-6 wow fadeInUp" data-wow-duration="1s">
+                    <div class="sign_up_form">
+                        <a style="width: 300px;" href="{% url 'home_page' %}" class="sign_up_logo">
+                            <img src="{{ setting.site_logo.url }}" alt="logo" class="img-fluid w-100">
+                        </a>
+                        <form action="" method="post">
+                            {% csrf_token %}
+
+                            <div class="form-group-row">
+                                <div class="form-group">
+                                    {{ register_form.last_name }}
+                                    {{ register_form.last_name.errors }}
+                                </div>
+                                <div class="form-group">
+                                    {{ register_form.first_name }}
+                                    {{ register_form.first_name.errors }}
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                {{ register_form.email }}
+                                {{ register_form.email.errors }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ register_form.mobile }}
+                                {{ register_form.mobile.errors }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ register_form.password }}
+                                {{ register_form.password.errors }}
+                            </div>
+
+                            <div class="form-group">
+                                {{ register_form.password_confirm }}
+                                {{ register_form.password_confirm.errors }}
+                            </div>
+                            <div class="form-group d-flex justify-content-center align-items-center">
+                                {{ register_form.captcha }}
+                                {{ register_form.captcha.errors }}
+                            </div>
+                            <br>
+                            <br>
+
+                            <button type="submit" class="common_btn w-100">ثبت نام کنید</button>
+                        </form>
+
+
+                        <p class="or">&nbsp</p>
+
+                        <p class="tf_new_account"><a href="{% url 'login_page' %}">ورود</a> اکانت کاربری دارید ؟ </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        SIGN UP END
+    ==============================-->
+{% endblock %}

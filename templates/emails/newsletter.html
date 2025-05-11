@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خبرنامه</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background-color: #007bff;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .content p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 15px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #3898ff;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: #1a85ff;
+        }
+
+        .footer {
+            background-color: #f4f4f9;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="header">
+        <h1>خبرنامه وبسایت رسمی دکتر مریم قره گوزلوئی</h1>
+    </div>
+    <div class="content">
+        <img style="max-width: 40%; max-height: 40%; margin: 15px 0;" src="https://biaupload.com/do.php?imgf=org-f0b3eea129ce1.png" alt="site logo">
+        <p>با سلام، مقاله ی جدید منتشر شد!</p>
+        <h3>{{ title }}</h3>
+        <p>{{ short_description }}</p>
+        <div style="margin: 20px 0;">
+            <a href="{{ url }}" class="btn">برای مشاهده ی مقاله به طور کامل، کلیک کنید.</a>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; تمامی حقوق متعلق به وبسایت رسمی دکتر مریم قره گوزلوئی می باشد. </p>
+        <p>اگر که نمیخواهید عضو خبرنامه ی ما باشید، کلیک کنید. <br>  <a href="{{ site_url }}{% url 'remove_subscription' email=email %}">ثبت</a>.</p>
+    </div>
+</div>
+</body>
+</html>

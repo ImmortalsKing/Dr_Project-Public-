@@ -1,0 +1,148 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+{% load render_partial %}
+
+{% block title %}
+    پنل کاربری
+{% endblock %}
+
+{% block content %}
+    <!--============================
+        DASHBOARD START
+    ==============================-->
+    {% if messages %}
+        <br>
+        <div style="direction: rtl" class="messages">
+            {% for message in messages %}
+                <div style="direction: rtl;" class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <section class="dashboard mt_100 xs_mt_70 pb_100 xs_pb_70" style="direction: rtl;">
+        <div class="container">
+            <div class="row">
+                {% render_partial 'user_panel_module.views.ProfileSidebarComponent' %}
+
+                <div class="col-xl-9 col-lg-8 wow fadeInRight" data-wow-duration="1s">
+                    <div class="dashboard_content">
+                        <h5>لیست کامل نظرات</h5>
+                        {% render_partial 'user_panel_module.views.CommentsFilterComponent' %}
+                        <div class="appointment_history">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                    <tr>
+                                        <th class="name">
+                                            نام کاربر
+                                        </th>
+
+                                        <th class="date">
+                                            تاریخ
+                                        </th>
+
+                                        <th class="chamber">
+                                            خلاصه ی نظر
+                                        </th>
+
+                                        <th class="status">
+                                            وضعیت
+                                        </th>
+
+                                        <th class="edit">
+                                            عملیات
+                                        </th>
+                                    </tr>
+                                    {% for comment in comments %}
+                                        <tr class="tabile_row">
+                                            <td class="name">
+                                                <p>{{ comment.user.get_full_name }}</p>
+                                                <span>{{ comment.subject }}</span>
+                                            </td>
+
+                                            <td class="date">
+                                                <p>{{ comment.create_date }}</p>
+                                            </td>
+
+                                            <td style="margin-left: 3rem;" class="comments_ellipsis">
+                                                <p title="{{ comment.text }}">{{ comment.text }}</p>
+                                            </td>
+
+                                            <td class="status">
+                                                {% if comment.is_confirmed and not comment.parent %}
+                                                    <button style="background-color: green;" class="confirmed">تائید
+                                                        شده
+                                                    </button>
+                                                {% elif not comment.is_confirmed and not comment.parent %}
+                                                    <button class="not_confirmed">تائید نشده</button>
+                                                {% elif comment.parent %}
+                                                    <button style="background-color: darkblue;" class="not_confirmed">
+                                                        توسط ادمین
+                                                    </button>
+                                                {% endif %}
+                                            </td>
+
+                                            <td class="status">
+                                                {% if comment.is_confirmed and not comment.parent %}
+                                                    <button style="background-color: gray;"
+                                                            onclick="window.location.href='{% url 'blog_details_page' slug=comment.blog.slug %}#comment_{{ comment.id }}'">
+                                                        مشاهده
+                                                    </button>
+                                                {% elif not comment.is_confirmed and not comment.parent %}
+                                                    <form action="" method="post">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="selected_comment_id"
+                                                               value="{{ comment.id }}">
+                                                        <button type="submit" name="confirm_comment_btn"
+                                                                style="background-color: gray;">تائید و مشاهده
+                                                        </button>
+                                                    </form>
+                                                {% elif comment.parent %}
+                                                    <button style="background-color: gray;"
+                                                            onclick="window.location.href='{% url 'blog_details_page' slug=comment.blog.slug %}#comment_{{ comment.id }}'">
+                                                        مشاهده
+                                                    </button>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row mt_60">
+                            <div class="col-12">
+                                <div id="pagination">
+                                    <nav aria-label="...">
+                                        <ul class="pagination justify-content-center">
+                                            {% if page_obj.has_previous %}
+                                                <li class="page-item"><a class="page-link"
+                                                                         href="?page={{ page_obj.previous_page_number }}"><i
+                                                        class="far fa-angle-double-left"></i></a></li>
+                                            {% endif %}
+                                            {% for pageNumber in paginator.page_range %}
+                                                <li class="page-item"><a
+                                                        class="page-link {% if page_obj.number == pageNumber %}active{% endif %}"
+                                                        href="?page={{ pageNumber }}">{{ pageNumber }}</a></li>
+                                            {% endfor %}
+                                            {% if page_obj.has_next %}
+                                                <li class="page-item"><a class="page-link"
+                                                                         href="?page={{ page_obj.next_page_number }}"><i
+                                                        class="far fa-angle-double-right"></i></a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        DASHBOARD END
+    ==============================-->
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+{% load render_partial %}
+
+{% block title %}
+    پنل کاربری
+{% endblock %}
+
+{% block content %}
+    <!--============================
+        DASHBOARD START
+    ==============================-->
+    {% if messages %}
+        <br>
+        <div style="direction: rtl" class="messages">
+            {% for message in messages %}
+                <div style="direction: rtl;" class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <section class="dashboard mt_100 xs_mt_70 pb_100 xs_pb_70" style="direction: rtl;">
+        <div class="container">
+            <div class="row">
+                {% render_partial 'user_panel_module.views.ProfileSidebarComponent' %}
+                <div class="col-xl-9 col-lg-8 wow fadeInRight" data-wow-duration="1s">
+                    <div style="position:relative;" class="dashboard_content">
+                        <h5>ساعت های کاری</h5>
+                        <div class="mb_50">
+                            <a class="blogs_list_edit" href="{% url 'about_doctor_edit' pk=doctor.pk %}">بازگشت</a>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <div class="col-md-6">
+                                    <div class="dashboard_profile_form">
+                                        {{ working_hour_form.day.label }}
+                                        {{ working_hour_form.day }}
+                                        {{ working_hour_form.day.errors }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="dashboard_profile_form">
+                                            {{ working_hour_form.start_time.label }}
+                                            {{ working_hour_form.start_time }}
+                                            {{ working_hour_form.start_time.errors }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="dashboard_profile_form">
+                                            {{ working_hour_form.end_time.label }}
+                                            {{ working_hour_form.end_time }}
+                                            {{ working_hour_form.end_time.errors }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="dashboard_profile_form">
+                                            {{ working_hour_form.time_of_day.label }}
+                                            {{ working_hour_form.time_of_day }}
+                                            {{ working_hour_form.time_of_day.errors }}
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <div class="col-xl-12">
+                                        <button type="submit" name="add_working_hour" class="common_btn">
+                                            افزودن
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <br>
+                            <br>
+                            <div class="col-lg-12">
+                                <div class="dashboard_profile_form">
+                                    <label>ساعت های کاری پزشک</label>
+                                    <ul>
+                                        {% for time in working_hours_list %}
+                                            <li>{{ time.day }}:
+                                                <div class="inline-container">
+                                                    <span>{{ time.start_time }}  - {{ time.end_time }} {{ time.time_of_day }}</span>
+                                                    <form action="" method="post">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="time_id" value="{{ time.id }}">
+                                                        <div class="delete_wh">
+                                                            <button type="submit" name="delete_wh">حذف</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </li>
+                                            {% empty %}
+                                            <li>هیچ ساعت کاری برای این پزشک وجود ندارد.</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        DASHBOARD END
+    ==============================-->
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+{% load render_partial %}
+
+{% block title %}
+	پنل کاربری
+{% endblock %}
+
+{% block content %}
+	<!--============================
+        DASHBOARD START
+    ==============================-->
+    {% if messages %}
+        <br>
+        <div style="direction: rtl" class="messages">
+            {% for message in messages %}
+                <div style="direction: rtl;" class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <section class="dashboard mt_100 xs_mt_70 pb_100 xs_pb_70" style="direction: rtl;">
+        <div class="container">
+            <div class="row">
+                {% render_partial 'user_panel_module.views.ProfileSidebarComponent' %}
+
+                <div class="col-xl-9 col-lg-8">
+                    <div class="dashboard_content">
+                        <div class="dashboard_profile">
+                            <h5>پروفایل من</h5>
+                            <a href="{% url 'edit_profile_page' %}">ویرایش</a>
+                            <ul>
+                                <li><span>نام:</span>{% if request.user.first_name and request.user.last_name %}{{ request.user.get_full_name }}{% else %}خالی{% endif %}</li>
+                                <li><span>موبایل:</span>{% if request.user.mobile %}{{ request.user.mobile }}{% else %}خالی{% endif %}</li>
+                                <li><span>ایمیل:</span>{% if request.user.email %}{{ request.user.email }}{% else %}خالی{% endif %}</li>
+                                <li><span>آدرس:</span>{% if request.user.address %}{{ request.user.address }}{% else %}خالی{% endif %}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        DASHBOARD END
+    ==============================-->
+{% endblock %}

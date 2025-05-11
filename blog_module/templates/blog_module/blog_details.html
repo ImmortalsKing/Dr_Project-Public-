@@ -1,0 +1,190 @@
+{% extends 'shared/_layout.html' %}
+{% load static %}
+
+{% block title %}
+    {{ blog.title }}
+{% endblock %}
+
+{% block content %}
+	<!--============================
+        BLOG DETAILS START
+    ==============================-->
+    {% if messages %}
+        <br>
+        <div style="direction: rtl" class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <section class="blog_details pt_100 xs_pt_70 pb_100 xs_pb_70" style="direction: rtl;">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-9 col-lg-8 wow fadeInLeft" data-wow-duration="1s">
+
+                    <div class="blog_details_content">
+                        <div class="blog_details_img">
+                            <img src="{{ blog.image.url }}" alt="blog img" class="img-fluid w-100">
+                        </div>
+
+                        <div class="blog_details_header d-flex flex-wrap justify-content-between">
+                            <ul class="blog_details_header_left d-flex flex-wrap">
+                                <li><span>{{ blog.category.title }}</span></li>
+                                <li><i class="far fa-user"></i>
+                                    {% if blog.author.first_name and blog.author.last_name %}
+                                    	{{ blog.author.get_full_name }}
+                                        {% else %}
+                                        {{ blog.author.email }}
+                                    {% endif %}
+                                </li>
+                                <li><i class="far fa-calendar-alt"></i>{{ blog.created_at }}</li>
+                            </ul>
+
+                            <ul class="blog_details_header_right d-flex flex-wrap">
+                                <li><i class="far fa-comment"></i>{{ comments_count }}</li>
+                            </ul>
+                        </div>
+
+                        <div class="blog_details_text">
+                            <h2 class="details_title">{{ blog.title }}</h2>
+                            <p>{{ blog.text|safe }}</p>
+                        </div>
+
+                        <div class="blog_details_share d-flex flex-wrap justify-content-between">
+                            {% if blog_tags %}
+                            	<ul class="tags d-flex flex-wrap align-items-center">
+                                {% for tag in blog_tags %}
+                                	<li><a href="#">{{ tag.caption }}</a></li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </div>
+
+                        {% if comments %}
+                        	<div class="comment_area">
+                        <h2>مجموع دیدگاه({{ comments_count }})</h2>
+                    {% for comment in comments %}
+                        <div id="comment_{{ comment.id }}" class="single_comment">
+                            <div class="comment_img">
+                                <img src="{{ comment.user.avatar.url }}" alt="review" class="img-fluid w-100">
+                            </div>
+                                <div class="comment_text">
+                                    <h4>
+                                        {% if comment.user.first_name and comment.user.last_name %}
+                                            {{ comment.user.get_full_name }}
+                                        {% else %}
+                                            {{ comment.user.email }}
+                                        {% endif %}
+                                        <span><i class="fal fa-clock"></i>{{ comment.create_date }}</span></h4>
+                                    <h6>({{ comment.subject }})</h6>
+                                    <br>
+                                    <p>{{ comment.text }}</p>
+                                    {% if request.user.is_superuser %}
+                                        <div class="comments_btns">
+                                    	<a onclick="fillParentId({{ comment.id }})"><i class="fal fa-reply-all"></i>پاسخ</a>
+                                        <form action="" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="delete_comment_id" value="{{ comment.id }}">
+                                    	<button name="delete" style="background: gray;"><i class="fal fa-reply-all"></i>حذف کردن</button>
+                                        </form>
+                                        </div>
+                                    {% endif %}
+                                </div></div>
+                            {% for sub_comment in comment.blogcomments_set.all %}
+                                <div id="comment_{{ sub_comment.id }}" class="single_comment commant_reply">
+                            <div class="comment_img">
+                                <img src="{{ sub_comment.user.avatar.url }}" alt="review" class="img-fluid w-100">
+                            </div>
+                            <div class="comment_text">
+                                <h4>{{ sub_comment.user.get_full_name }}<span><i class="fal fa-clock" aria-hidden="true"></i>{{ sub_comment.create_date }}</span>
+                                </h4>
+                                <br>
+                                <p>{{ sub_comment.text }}</p>
+                                {% if request.user.is_superuser %}
+                                    <div class="comments_btns">
+                                        <form action="" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="cdelete_comment_id" value="{{ sub_comment.id }}">
+                                    	<button name="child_delete" style="background: gray;"><i class="fal fa-reply-all"></i>حذف کردن</button>
+                                        </form>
+                                    </div>
+                                    {% endif %}
+                            </div>
+                        </div>
+                            {% endfor %}
+
+                            {% endfor %}
+                    </div>
+                            <br>
+                            {% else %}
+                            <div class="alert alert-info">کامنتی جهت نمایش، وجود ندارد.</div>
+                        {% endif %}
+
+                        {% if request.user.is_authenticated %}
+                    	<form action="" method="post" class="comment_input_area" id="comment_area">
+                        {% csrf_token %}
+                        <h2>ارسال دیدگاه</h2>
+                        <div class="row">
+                            <input type="hidden" id="parent_id" name="parent_id" value="">
+                            <div class="col-xl-6">
+                                <label>موضوع: </label>
+                                {{ form.subject }}
+                                {{ form.subject.errors }}
+                            </div>
+                            <div class="col-xl-12 mt-4 mb-4">
+                                <label>متن: </label>
+                                {{ form.text }}
+                                {{ form.text.errors }}
+                            </div>
+                            <div class="col-xl-12 mt-4 mb-4">
+                                {{ form.captcha }}
+                                {{ form.captcha.errors }}
+                            </div>
+                            <div class="col-xl-12">
+                                <button name="send_comment" type="submit" class="common_btn">ارسال کنید</button>
+                            </div>
+                        </div>
+                    </form>
+                        {% else %}
+                        <strong>جهت ارسال نظر می باست ابتدا &nbsp;<a href="{% url 'login_page' %}">وارد</a> &nbsp; شوید</strong>
+                    {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-4 wow fadeInRight" data-wow-duration="1s">
+                    <div id="sticky_sidebar">
+                        <div class="team_details_timeing">
+                            <h5>روزهای کاری پزشک</h5>
+                            {% for time in working_hours %}
+                                <p class="d-flex justify-content-between">{{ time.day }}<span>{{ time.start_time }}  - {{ time.end_time }} {{ time.time_of_day }}</span>
+                                </p>
+                            {% endfor %}
+                        </div>
+                        <div class="service_dtls_rightside">
+                            <h5>پست ها اخیر</h5>
+                            <ul class="sidebar_post">
+                                {% for last_blog in last_blogs %}
+                                	<li>
+                                    <div class="recent_post_img">
+                                        <img src="{{ last_blog.image.url }}" alt="post" class="img-fluid w-100">
+                                    </div>
+                                    <div class="recent_post_text">
+                                        <p><i class="fas fa-calendar-alt"></i>{{ last_blog.created_at }}</p>
+                                        <a href="{% url 'blog_details_page' slug=last_blog.slug %}">{{ last_blog.title }}</a>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--============================
+        BLOG DETAILS END
+    ==============================-->
+{% endblock %}

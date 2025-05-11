@@ -1,0 +1,20 @@
+<div style="background-color: #ecfaea;" class="row list_options">
+    <div class="col-md-4 text-center">
+        <select id="comments-options" class="form-select">
+            <option value="{% url 'about_dr_comments_list' %}"
+                    {% if request.path == '/my-profile/comments-list/about-doctor/' %}selected{% endif %}>
+                نظرات مربوط به پزشک
+            </option>
+            <option value="{% url 'blogs_comments_list' %}"
+                    {% if request.path == '/my-profile/comments-list/blogha/' %}selected{% endif %}>
+                نظرات مربوط به مقاله ها
+            </option>
+        </select>
+    </div>
+</div>
+
+<script>
+    document.getElementById("comments-options").addEventListener("change", function () {
+        window.location.href = this.value;
+    });
+</script>
